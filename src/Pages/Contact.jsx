@@ -2,41 +2,41 @@ import React from 'react'
 import { Alert, Loader } from '../components'
 import { Canvas } from 'react-three-fiber'
 import { Suspense } from 'react'
-import { useState,useRef } from 'react'
+import { useState, useRef } from 'react'
 import emailjs from '@emailjs/browser'
 import Fox from '../models/Fox'
 import useAlert from '../hooks/useAlert'
-
+import { socialLinks, projects } from '../constants'
 const Contact = () => {
-  const {alert , showAlert , hideAlert} = useAlert() ; 
+  const { alert, showAlert, hideAlert } = useAlert();
   const formRef = useRef(null);
   const [form, setForm] = useState({
-    name:'',
+    name: '',
     email: '',
     message: '',
-  }) ; 
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const [currentAnimation , setCurrentAnimation] = useState('idle') ;
-    const handleChange = (e) => {
-    setForm({...form , [e.target.name]:e.target.value}) ; 
-  }; 
-  
+  const [currentAnimation, setCurrentAnimation] = useState('idle');
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
   const handleFocus = () => {
-    setCurrentAnimation('walk') ; 
-  }; 
-  const handleBlur = () => { 
-    setCurrentAnimation('idle') ; 
-  }; 
+    setCurrentAnimation('walk');
+  };
+  const handleBlur = () => {
+    setCurrentAnimation('idle');
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setCurrentAnimation('hit') ; 
-    console.log("import.meta.env.VITE_APP_SERVICE_ID:",import.meta.env.VITE_APP_SERVICE_ID) ;
-    console.log("import.meta.env.VITE_APP_TEMPLATE_ID:",import.meta.env.VITE_APP_TEMPLATE_ID) ;
-    console.log("import.meta.env.VITE_APP_PUBLIC_KEY:",import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY) ;
-    emailjs.send( 
-      import.meta.env.VITE_APP_SERVICE_ID, 
-      import.meta.env.VITE_APP_TEMPLATE_ID, 
+    setCurrentAnimation('hit');
+    console.log("import.meta.env.VITE_APP_SERVICE_ID:", import.meta.env.VITE_APP_SERVICE_ID);
+    console.log("import.meta.env.VITE_APP_TEMPLATE_ID:", import.meta.env.VITE_APP_TEMPLATE_ID);
+    console.log("import.meta.env.VITE_APP_PUBLIC_KEY:", import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY);
+    emailjs.send(
+      import.meta.env.VITE_APP_SERVICE_ID,
+      import.meta.env.VITE_APP_TEMPLATE_ID,
       {
         from_name: form.name,
         to_name: 'Bagga Sedki',
@@ -46,33 +46,33 @@ const Contact = () => {
       },
       import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
     )
-    .then(() => {
-      setIsLoading(false); 
-      showAlert({type:'success' , text:'Your message sent successfully' , show : true}) ; 
-      setTimeout(()=>{
-        setCurrentAnimation('idle') ; 
-        setForm({name:'',email:'',message:''});
-      },3000)
-    
-    })
-    .catch((error) => {
-      setIsLoading(false);
-      setCurrentAnimation('idle') ; 
-      console.log(error);
-      showAlert({type:'danger' , text:'I didnt receive your message' , show : true}) ; 
+      .then(() => {
+        setIsLoading(false);
+        showAlert({ type: 'success', text: 'Your message sent successfully', show: true });
+        setTimeout(() => {
+          setCurrentAnimation('idle');
+          setForm({ name: '', email: '', message: '' });
+        }, 3000)
 
-    })
-  }; 
-//  console.log(alert.show) ;
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        setCurrentAnimation('idle');
+        console.log(error);
+        showAlert({ type: 'danger', text: 'I didnt receive your message', show: true });
+
+      })
+  };
+  //  console.log(alert.show) ;
   return (
     <section className='relative flex lg:flex-row flex-col max-container h-[100vh]'>
-      {alert.show ===true  && <Alert {...alert} />}
+      {alert.show === true && <Alert {...alert} />}
       <div className='flex-1 min-w-[50%] flex flex-col'>
         <h1 className='head-text'>Get in Touch</h1>
 
         <form
           // ref={formRef}
-           onSubmit={handleSubmit}
+          onSubmit={handleSubmit}
           className='w-full flex flex-col gap-7 mt-14'
         >
           <label className='text-black-500 font-semibold'>
@@ -83,10 +83,10 @@ const Contact = () => {
               className='input'
               placeholder='John'
               required
-               value={form.name}
-               onChange={handleChange}
-               onFocus={handleFocus}
-               onBlur={handleBlur}
+              value={form.name}
+              onChange={handleChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             />
           </label>
           <label className='text-black-500 font-semibold'>
@@ -98,9 +98,9 @@ const Contact = () => {
               placeholder='John@gmail.com'
               required
               value={form.email}
-               onChange={handleChange}
-               onFocus={handleFocus}
-               onBlur={handleBlur}
+              onChange={handleChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             />
           </label>
           <label className='text-black-500 font-semibold'>
@@ -110,21 +110,21 @@ const Contact = () => {
               rows='4'
               className='textarea'
               placeholder='Write your thoughts here...'
-               value={form.message}
-               onChange={handleChange}
-               onFocus={handleFocus}
-               onBlur={handleBlur}
+              value={form.message}
+              onChange={handleChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             />
           </label>
 
           <button
             type='submit'
-             disabled={isLoading}
-             className='btn'
-             onFocus={handleFocus}
+            disabled={isLoading}
+            className='btn'
+            onFocus={handleFocus}
             onBlur={handleBlur}
           >
-             {isLoading ? "Sending..." : "Submit"} 
+            {isLoading ? "Sending..." : "Submit"}
           </button>
         </form>
       </div>
@@ -149,12 +149,27 @@ const Contact = () => {
           />
 
           <Suspense fallback={<Loader />}>
-             <Fox
-             currentAnimation={currentAnimation}
+            <Fox
+              currentAnimation={currentAnimation}
               position={[0.5, 0.35, 0]}
               rotation={[12.629, -0.6, 0]}
               scale={[0.5, 0.5, 0.5]}
-            /> 
+            />
+
+            {/* <div className='mt-16 flex flex-wrap gap-12'>
+              {socialLinks.map((socialLink) => (
+                <div className='block-container w-20 h-20' key={socialLink.name}>
+                  <div className='btn-back rounded-xl' />
+                  <div className='btn-front rounded-xl flex justify-center items-center'>
+                    <img
+                      src={socialLink.iconUrl}
+                      alt={socialLink.name}
+                      className='w-1/2 h-1/2 object-contain'
+                    />
+                  </div>
+                </div>
+              ))}
+            </div> */}
           </Suspense>
         </Canvas>
       </div>
